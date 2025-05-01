@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | TechLab</title>
+    <link rel="stylesheet" href="{% static 'css/faq.css' %}">
+    <script defer src="{% static 'js/landing.js' %}"></script>
+</head>
+<body>
+    
+    <div id="sideMenu" class="side-menu">
+        <button class="close-btn" onclick="toggleMenu()">✖</button>            <h2>Categories</h2>
+        <ul>
+            <li><a href="{% url 'category_page' 1 %}">TVs</a></li>
+            <li><a href="{% url 'category_page' 2 %}">Phones</a></li>
+            <li><a href="{% url 'category_page' 3 %}">Tablets/iPads</a></li>
+            <li><a href="{% url 'category_page' 4 %}">Computing</a></li>
+            <li><a href="{% url 'category_page' 5 %}">Consoles</a></li>
+            <li><a href="{% url 'category_page' 6 %}">Smart Tech</a></li>
+            <li><a href="{% url 'category_page' 7 %}">Accessories</a></li>
+        </ul>
+        <hr>
+        <ul>
+            <li><a href="{% url 'history' %}">Purchase History</a></li>
+            <li><a href="{% url 'faq' %}">FAQ</a></li>
+        </ul>
+    </div>
+
+    <header>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <a href="{% url 'landing' %}" class="home-btn">🏠</a>
+        <form action="{% url 'search_products' %}" method="GET">
+            <input type="text" name="q" placeholder="Search products..." required>
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="nav-icons">
+            <div class="receipt-wrapper">
+                <button class="receipt-toggle">🧾 Receipts</button>
+                <div class="receipt-dropdown">
+                    {% for receipt in recent_receipts %}
+                        <div class="receipt-item">
+                            {% for item in receipt.items %}
+                                <p>{{ item.product.name }} - £{{ item.product.price }}</p>
+                            {% endfor %}
+                            <strong>Total: £{{ receipt.total }}</strong>
+                            <hr>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-icons">
+            <a href="{% url 'wishlist' %}" class="wishlist">❤️</a>
+            <a href="{% url 'cart' %}" class="cart">🛒</a>
+            <a href="{% url 'logout' %}" class="logout">🚪 Logout</a>
+        </div>
+    </header>
+
+    <div class="faq-container">
+        <h1>Frequently Asked Questions (FAQs)</h1>
+
+<div class="faq">
+    <div class="faq-question">🛍️ How do I place an order?</div>
+    <div class="faq-answer">
+        <p>1. Browse products by category or use the search bar.<br>
+           2. Click a product to view its details.<br>
+           3. Select a quantity and click “Add to Cart.”<br>
+           4. Go to your cart and click “Checkout.”</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">👤 Do I need an account to order?</div>
+    <div class="faq-answer">
+        <p>No, you can login as a guest to make a quick purchase, but if you wish to save your cart and view your receipt you must make an account.</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">🔐 How do I reset my password?</div>
+    <div class="faq-answer">
+        <p>Click “Forgot Password” on the login page, and you’ll receive an email with a link to reset it.</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">💳 What payment methods are accepted?</div>
+    <div class="faq-answer">
+        <p>We accept Visa, MasterCard, PayPal, Apple Pay, and Google Pay.</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">🚚 How long does delivery take?</div>
+    <div class="faq-answer">
+        <p>Standard delivery takes 3–5 working days. You'll get a tracking number once your order ships.</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">💬 How can I contact customer support?</div>
+    <div class="faq-answer">
+        <p>Email: support@techlab.com<br>
+           Phone: +44 1234 567890<br>
+           Live Chat: Weekdays 9am–5pm (UK time)</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">📦 Can I track my order?</div>
+    <div class="faq-answer">
+        <p>Yes! After shipping, you'll receive a tracking number via email. You can also check your order status in your account.</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">🔄 Can I return a product?</div>
+    <div class="faq-answer">
+        <p>NO REFUNDS!!!!!!!!!!!!!!!!!!!!</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">🧾 Where can I view my receipts?</div>
+    <div class="faq-answer">
+        <p>Click the Receipts icon in the navigation bar to see your recent purchases and total amounts.</p>
+    </div>
+</div>
+
+<div class="faq">
+    <div class="faq-question">❤️ How does the wishlist work?</div>
+    <div class="faq-answer">
+        <p>Click the heart icon on any product to save it. Access your wishlist via the heart icon in the navbar.</p>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+        item.addEventListener('click', () => {
+            item.parentElement.classList.toggle('open');
+        });
+    });
+</script>
+    </div>
+</body>
+</html>

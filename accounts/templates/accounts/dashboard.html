@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page | TechLab</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background_dashboard.gif' %}") no-repeat center center fixed; 
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        #typing-effect {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            padding: 20px;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 5px;
+            height: 30px;
+            background-color: #fff;
+            animation: blink 0.5s steps(2, start) infinite;
+            margin-left: 3px;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="typing-effect"></div>
+    <div class="cursor"></div>
+
+    <script>
+        const text = "Welcome to TechLab";
+        const typingElement = document.getElementById("typing-effect");
+        let index = 0;
+
+        function typeLetter() {
+            if (index < text.length) {
+                typingElement.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeLetter, 100);
+            }
+        }
+
+        typeLetter();
+        
+        
+        setTimeout(() => {
+            window.location.href = "{% url 'landing' %}";
+        }, 5000);
+    </script>
+</body>
+</html>

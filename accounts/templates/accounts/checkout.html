@@ -1,0 +1,117 @@
+{% load custom_filters %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+    <script defer src="{% static 'js/checkout.js' %}"></script>
+    <script defer src="{% static 'js/landing.js' %}"></script>
+    <script>
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+    </script>
+    <script>
+        const thankYouUrl = "{% url 'thank_you' %}";
+    </script>    
+    
+</head>
+<body>
+    <div id="sideMenu" class="side-menu">
+        <button class="close-btn" onclick="toggleMenu()">✖</button>
+        <h2>Categories</h2>
+        <ul>
+            <li><a href="{% url 'category_page' 1 %}">TVs</a></li>
+            <li><a href="{% url 'category_page' 2 %}">Phones</a></li>
+            <li><a href="{% url 'category_page' 3 %}">Tablets/iPads</a></li>
+            <li><a href="{% url 'category_page' 4 %}">Computing</a></li>
+            <li><a href="{% url 'category_page' 5 %}">Consoles</a></li>
+            <li><a href="{% url 'category_page' 6 %}">Smart Tech</a></li>
+            <li><a href="{% url 'category_page' 7 %}">Accessories</a></li>
+        </ul>
+        <hr>
+        <ul>
+            <li><a href="{% url 'history' %}">Purchase History</a></li>
+            <li><a href="{% url 'faq' %}">FAQ</a></li>
+        </ul>
+    </div>
+
+    <header>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <a href="{% url 'landing' %}" class="home-btn">🏠</a>
+        <form action="{% url 'search_products' %}" method="GET">
+            <input type="text" name="q" placeholder="Search products..." required>
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="nav-icons">
+            <div class="receipt-wrapper">
+                <button class="receipt-toggle">🧾 Receipts</button>
+                <div class="receipt-dropdown">
+                    {% for receipt in recent_receipts %}
+                        <div class="receipt-item">
+                            {% for item in receipt.items %}
+                                <p>{{ item.product.name }} - £{{ item.product.price }}</p>
+                            {% endfor %}
+                            <strong>Total: £{{ receipt.total }}</strong>
+                            <hr>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        <div class="nav-icons">
+            <a href="{% url 'wishlist' %}" class="wishlist">❤️</a>
+            <a href="{% url 'cart' %}" class="cart">🛒</a>
+            <a href="{% url 'logout' %}" class="logout">🚪 Logout</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="checkout-container">
+            <h2>Your Items</h2>
+
+            {% if cart_items %}
+                <div class="cart-list">
+                    {% for item in cart_items %}
+                        <div class="cart-item">
+                            <div class="cart-img-container">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-img">
+                            </div>
+                            <div class="cart-details">
+                                <h3>{{ item.product.name }}</h3>
+                                <p>Price: £{{ item.product.price }}</p>
+                                <p>Quantity: {{ item.quantity }}</p>
+                                <p><strong>Total:</strong> £{{ item.product.price|multiply:item.quantity|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Your cart is empty.</p>
+            {% endif %}
+
+            <div class="cart-summary">
+                <p><strong>Total Price:</strong> £<span id="totalPrice">{{ total_price }}</span></p>
+                <p><strong>Your Wallet Balance:</strong> £<span id="walletBalance">{{ user.wallet.balance }}</span></p>
+            </div>
+
+            <form id="paymentForm">
+                {% csrf_token %}
+            </form>
+
+            {% if user.wallet.balance >= total_price %}
+                <button id="confirmPayment">Confirm Payment</button>
+            {% else %}
+                <p class="error">⚠️ Insufficient funds in your wallet.</p>
+            {% endif %}
+            
+            <p id="errorMessage" class="error"></p>
+        </div>
+    </main>
+
+</body>
+</html>

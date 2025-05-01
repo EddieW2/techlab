@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechLab - Home</title>
+    <link rel="stylesheet" href="{% static 'css/landing_page.css' %}">
+    <script defer src="{% static 'js/landing.js' %}"></script>
+</head>
+<body>
+
+    <div id="sideMenu" class="side-menu">
+        <button class="close-btn" onclick="toggleMenu()">✖</button>
+        <h2>Categories</h2>
+        <ul>
+            <li><a href="{% url 'category_page' 1 %}">TVs</a></li>
+            <li><a href="{% url 'category_page' 2 %}">Phones</a></li>
+            <li><a href="{% url 'category_page' 3 %}">Tablets/iPads</a></li>
+            <li><a href="{% url 'category_page' 4 %}">Computing</a></li>
+            <li><a href="{% url 'category_page' 5 %}">Consoles</a></li>
+            <li><a href="{% url 'category_page' 6 %}">Smart Tech</a></li>
+            <li><a href="{% url 'category_page' 7 %}">Accessories</a></li>
+        </ul>
+        <hr>
+        <ul>
+            <li><a href="{% url 'history' %}">Purchase History</a></li>
+            <li><a href="{% url 'faq' %}">FAQ</a></li>
+        </ul>
+    </div>
+
+    <header>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <form action="{% url 'search_products' %}" method="GET">
+            <input type="text" name="q" placeholder="Search products..." required>
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="nav-icons">
+    <div class="receipt-wrapper">
+        <button class="receipt-toggle">🧾 Receipts</button>
+        <div class="receipt-dropdown">
+            {% for receipt in recent_receipts %}
+                <div class="receipt-item">
+                    
+                    {% for item in receipt.items %}
+                        <p>{{ item.product.name }} - £{{ item.product.price }}</p>
+                    {% endfor %}
+                    <strong>Total: £{{ receipt.total }}</strong>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+        
+        <div class="nav-icons">
+            <a href="{% url 'wishlist' %}" class="wishlist">❤️</a>
+            <a href="{% url 'cart' %}" class="cart">🛒</a>
+            <a href="{% url 'logout' %}" class="logout">🚪 Logout</a>
+        </div>
+    </header>
+
+    <section class="slideshow">
+        <div class="slides">
+            <a href="{% url 'product_detail' 15 %}"><img src="{% static 'images/iphone.jpg' %}" alt="Featured Deal"></a>
+            <a href="{% url 'product_detail' 71 %}"><img src="{% static 'images/latest.jpg' %}" alt="New Arrivals"></a>
+            <a href="{% url 'category_page' 4 %}"><img src="{% static 'images/deals.webp' %}" alt="Discounted Items"></a>
+        </div>
+    </section>
+
+    <section class="products">
+        <h2>Recommended for You</h2>
+        {% if recommended_products %}
+        <div class="scroll-container">
+            {% for product in recommended_products %}
+                <div class="scroll-item">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <p>{{ product.name }}</p>
+                    <p>£{{ product.price }}</p>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Product</a>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+    </section>
+
+    <section class="products">
+        <h2>Random Items</h2>
+        <div class="product-row" id="random">
+        </div>
+        {% if random_category %}
+        <div class="scroll-container">
+            {% for product in random_products %}
+                <div class="scroll-item">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <p>{{ product.name }}</p>
+                    <p>£{{ product.price }}</p>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Product</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}    
+    </section>
+
+    <section class="products">
+        <h2>Buy Again</h2>
+        {% if last_purchases %}
+        <div class="scroll-container">
+            {% for product in last_purchases %}
+                <div class="scroll-item">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <p>{{ product.name }}</p>
+                    <p>£{{ product.price }}</p>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Product</a>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p>No recent purchases found.</p>
+        {% endif %}
+    </section>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
