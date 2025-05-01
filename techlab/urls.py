@@ -20,11 +20,13 @@ from accounts import views, views as account_views
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts .views import process_payment
+from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('process-payment/', account_views.process_payment, name='process-payment'),
+    path('', lambda request: redirect('login', permanent=False))
 ] 
 
 if settings.DEBUG:
