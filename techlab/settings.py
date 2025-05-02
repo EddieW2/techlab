@@ -24,11 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-5w)i^x$qvf0u95x(1_6xkp4_%%2q)yizissm9%%*p4^&k6le3m'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default-secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", '127.0.0.1', '192.168.1.217', 'techlab-12zt.onrender.com','*']
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", '127.0.0.1', '192.168.1.217', 'techlab-12zt.onrender.com', '*', '.onrender.com']
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
